@@ -2,47 +2,52 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\SubmissionController;
-use App\Http\Controllers\Api\ApprovalController;
-use App\Http\Controllers\Api\ScheduleController;
-use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\BookController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\LoanController;
 
 /*
 |--------------------------------------------------------------------------
 | Public API Routes
 |--------------------------------------------------------------------------
-| API digunakan oleh frontend / mobile app
-| Sistem Perencanaan Sidang Skripsi + TTE
+| API digunakan oleh client (frontend / mobile)
+| Sistem Manajemen Perpustakaan Digital
+| Laravel Filament
 */
 
 // ===== AUTH =====
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
-// ===== SUBMISSION (MAHASISWA) =====
-Route::get('/submissions', [SubmissionController::class, 'index']);     // list pengajuan
-Route::post('/submissions', [SubmissionController::class, 'store']);    // ajukan sidang
-Route::get('/submissions/{id}', [SubmissionController::class, 'show']); // detail
-Route::delete('/submissions/{id}', [SubmissionController::class, 'destroy']);
+// ===== BOOK / DIGITAL COLLECTION =====
+Route::get('/books', [BookController::class, 'index']);        // list buku
+Route::post('/books', [BookController::class, 'store']);       // tambah buku
+Route::get('/books/{book}', [BookController::class, 'show']);  // detail
+Route::put('/books/{book}', [BookController::class, 'update']);
+Route::delete('/books/{book}', [BookController::class, 'destroy']);
 
-// ===== APPROVAL + TTE (DOSEN & KAPRODI) =====
-Route::get('/approvals', [ApprovalController::class, 'index']);         
-Route::post('/approvals/{id}/approve', [ApprovalController::class, 'approve']);
-Route::post('/approvals/{id}/reject', [ApprovalController::class, 'reject']);
+// ===== CATEGORY =====
+Route::get('/categories', [CategoryController::class, 'index']);
+Route::post('/categories', [CategoryController::class, 'store']);
+Route::put('/categories/{category}', [CategoryController::class, 'update']);
+Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
 
-// ===== SCHEDULE (ADMIN) =====
-Route::get('/schedules', [ScheduleController::class, 'index']);
-Route::post('/schedules', [ScheduleController::class, 'store']);
-Route::put('/schedules/{id}', [ScheduleController::class, 'update']);
-Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
+// ===== USER MANAGEMENT =====
+Route::get('/users', [UserController::class, 'index']);
+Route::post('/users', [UserController::class, 'store']);
+Route::put('/users/{user}', [UserController::class, 'update']);
+Route::delete('/users/{user}', [UserController::class, 'destroy']);
 
-// ===== NOTIFICATION =====
-Route::get('/notifications', [NotificationController::class, 'index']);
+// ===== LOAN / PEMINJAMAN =====
+Route::get('/loans', [LoanController::class, 'index']);
+Route::post('/loans', [LoanController::class, 'store']);
+Route::put('/loans/{loan}/return', [LoanController::class, 'returnBook']);
 
 // ===== TEST API =====
 Route::get('/', function () {
     return response()->json([
         'status' => 'success',
-        'message' => 'API Sidang Skripsi is running'
+        'message' => 'Library API is working properly'
     ]);
 });
